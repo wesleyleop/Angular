@@ -1,0 +1,183 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-2">
+            <div class="top-picture2 first-divider-search">
+                <img src="assets/images/logo1.png" alt="">
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-10">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>&nbsp;</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!--Search-->
+                    <form name="searchForm" class="form-inline-rem" ng-submit="vm.search(searchForm.$valid && vm.searchParams.currentPosition)" novalidate>
+                        <div class="row">
+                            <div class="col-sm-8 col-md-6 form-group"
+                                 ng-class="{ 'has-error': (searchForm.searchKeyword.$touched || searchForm.$submitted) && searchForm.searchKeyword.$invalid }">
+                                <button type="submit" class="btn btn-primary pull-right no_border_radius"> <span class="glyphicon glyphicon-search"></span></button>
+                                <div style="margin-right: 50px;">
+                                    <input type="text" name="searchKeyword" class="form-control no_border_radius"
+                                           placeholder="{{ 'SEARCH.ENTER SEARCH STRING' | translate}}"
+                                           ng-model="vm.searchParams.keyword">
+                                </div>
+                                <div class="form_error" ng-messages="searchForm.searchKeyword.$error"
+                                     ng-if="searchForm.searchKeyword.$touched || searchForm.$submitted"
+                                     role="alert"> <p ng-message="required" translate="HOME.SEARCH KEY EMPTY"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- div class="row">
+                            <div class="col-sm-12 form-group">
+                                <button type="submit" class="btn btn-primary pull-right no_border_radius" translate="HOME.SEARCH"> <span class="glyphicon glyphicon-search"></span></button>
+                                <div class="input-group" style="margin-right: 100px;"
+                                     ng-class="{ 'has-error': (searchForm.currentPosition.$touched || searchForm.$submitted) && searchForm.currentPosition.$invalid || vm.location_not_choosen}">
+                                    <span ng-click="vm.locate()" class="input-group-addon location-marker"><span class="glyphicon glyphicon-map-marker"></span> <span translate="CLIENT.MY LOCATION"></span></span>
+                                    <input type="text" name="currentPosition" id="searchLocationInput" class="form-control no_border_radius"
+                                           placeholder="{{ 'SEARCH.CURRENT POSITION' | translate }}"
+                                           ng-model="vm.searchParams.currentPosition" required>
+                                </div>
+                                <div class="form_error" ng-messages="searchForm.currentPosition.$error"
+                                     ng-if="searchForm.currentPosition.$touched || searchForm.$submitted"
+                                     role="alert"> <p ng-message="required" translate="HOME.POSITION EMPTY"></p>
+                                </div>
+                                <p ng-if="vm.location_not_choosen" class="cl-brown">{{ vm.location_not_choosen | translate}}</p>
+                            </div>
+                        </div -->
+                        <input ng-hide="true" type="text" name="currentPosition" id="searchLocationInput" class="form-control"
+                               placeholder="{{ 'SEARCH.CURRENT POSITION' | translate }}"
+                               ng-model="vm.searchParams.currentPosition" required>
+                        <input ng-hide="true" name="latitude" id="latitude" type="text" class="form-control" ng-model="vm.latitude">
+                        <input ng-hide="true" name="longitude" id="longitude" type="text" class="form-control" ng-model="vm.longitude">
+                    </form>
+                    <!--/Search-->
+                </div>
+            </div>
+
+            <div class="row" ng-if="vm.loading">
+                <div class="col-md-12 text-center v-center-lg">
+                    <img src="assets/images/loading.gif" alt="loading">
+                </div>
+            </div>
+
+            <div class="row" ng-if="!vm.loading">
+                <!-- <div class="col-md-12">
+                    <h3 translate="SEARCH.SEARCH RESULTS"></h3>
+                </div> -->
+
+                <div class="col-md-12" ng-show="!vm.searchParams.searchToggle">
+                    <div ng-show="vm.restaurants.length == 0">
+                        <h4 translate="SEARCH.NO RESTAURANTS FOUND"></h4>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 rem-col-md-4"
+                             dir-paginate="restaurant in vm.restaurants | itemsPerPage: vm.restaurantsItemsPerPage"
+                             total-items="vm.restaurantsTotalItems" style="height: 118px;" current-page="vm.restaurantsCurrentPage" pagination-id="restaurantID">
+                            <div class="row search-result-item" style= "margin-left:1px;background-color: {{restaurant.highlight >0 ? '#' + restaurant.hl_colour:'#fdfdfd'}}">
+                                <div class="col-xs-12">
+                                    <div class="item-image">
+                                        <img src="assets/images/placeholder.jpg" style="max-width: 100px !important;width: 100px;" ng-show="restaurant.photos.length == 0">
+                                        <img ng-src="{{ restaurant.photos[0] }}" style="max-width: 100px !important;width: 100px;" ng-show="restaurant.photos.length > 0">
+                                    </div>
+                                    <div class="item-content">
+                                        <h4 class="item-title">
+                                            <a class="cl-brown" href="{{restaurant.detail}}" target="_blank"> <!-- href="{{ restaurant.detail }}"  -->
+                                                {{ restaurant.name }}<span ng-if="restaurant.city">, {{ restaurant.city }}</span>
+                                            </a>
+                                        </h4>
+                                        <p>
+                                            {{ restaurant.short_descr | limitTo: 55}}<br>
+                                            <span>{{ restaurant.distance }} km</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div><br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <ul class="pagination pagination-separated pagination-rounded text-center">
+                                <dir-pagination-controls on-page-change="vm.search('paginate')" pagination-id="restaurantID"></dir-pagination-controls>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-3 restaurant-border-gray"
+                            ng-hide="vm.restaurants.length == 0"  style= "background-color: {{vm.restaurantInfo.highlight >0 ? '#' + vm.restaurantInfo.hl_colour:'#fdfdfd'}}">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-6 col-md-12">
+                                    <div class="restaurant-images-wrapper row restaurant-images">
+                                        <slick ng-show="!vm.restaurantInfo.photos || vm.restaurantInfo.photos.length == 0">
+                                            <div><img src="assets/images/placeholder.jpg" width="99%"></div>
+                                        </slick>
+                                        <div ng-show="vm.restaurantInfo.photos.length &gt; 0">
+                                            <slick data="vm.restaurantInfo.photos.length" slides-to-show=1 slides-to-scroll=1 init-onload=true dots=true>
+                                                <div ng-repeat="photo in vm.restaurantInfo.photos">
+                                                    <img width="100%" ng-src="http://api.gastro-booking.com/{{ photo }}">
+                                                </div>
+                                            </slick>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-12">
+                                    <div class="row restaurant-descriptions">
+                                        <div class="col-md-12">
+                                            <h3><a target="_blank" class="cl-brown" ng-click="vm.viewClicked(vm.restaurantInfo.id, vm.restaurantInfo.www)" style="cursor: pointer;">{{ vm.restaurantInfo.name }}</a></h3>
+                                            <p ng-if="vm.restaurantInfo.www"><a target="_blank" class="cl-green" ng-click="vm.viewClicked(vm.restaurantInfo.id, vm.restaurantInfo.www)" style="cursor: pointer;">  <!-- href="http://{{ vm.restaurantInfo.www }}"  -->
+                                                {{ vm.restaurantInfo.www }}</a>
+                                            </p>
+                                            <p ng-if="vm.restaurantInfo.city">{{vm.restaurantInfo.street}}, {{vm.restaurantInfo.city}}</p>
+                                            <p><span class="cl-gray" translate="RESTAURANT.PHONE"></span>: {{ vm.restaurantInfo.phone }}</p>
+
+                                        </div>
+                                        <div class="col-md-12" ng-show="vm.restaurantInfo.short_descr">
+                                            <strong translate="HOME.OFFER"></strong>
+                                            <p>{{ vm.restaurantInfo.short_descr }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-9" pagination-id="googleRestaurantID" current-page="vm.googleCurrentPage"
+                             dir-paginate="grestaurant in vm.googleRestaurants | itemsPerPage: vm.googleItemsPerPage track by $index">
+                            <div class="row google-result-item">
+                                <div class="col-xs-12">
+                                    <div class="gs-image" ng-show="grestaurant.pagemap.cse_thumbnail">
+                                        <a href="{{ grestaurant.link }}" target="_blank">
+                                            <img ng-src="{{ grestaurant.pagemap.cse_thumbnail[0].src }}">
+                                        </a>
+                                    </div>
+                                    <div class="gs-content">
+                                        <h4 class="item-title">
+                                            <a href="{{ grestaurant.link }}" target="_blank" ng-bind-html="grestaurant.htmlTitle"></a>
+                                        </h4>
+                                        <p ng-bind-html="grestaurant.htmlSnippet"></p>
+                                        <a class="cl-green" href="{{ grestaurant.link }}" target="_blank" ng-bind-html="grestaurant.htmlFormattedUrl"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <ul class="pagination pagination-separated pagination-rounded text-center">
+                                <dir-pagination-controls pagination-id="googleRestaurantID"></dir-pagination-controls>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

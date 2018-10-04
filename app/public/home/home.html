@@ -1,0 +1,88 @@
+<div class="main-wrapper">
+    <div class="top-picture first-divider">
+        <img src="assets/images/logo1.png" alt="">
+    </div>
+    <div class="container-fluid zigzag">
+        <div class="row home-register">
+            <div class="col-xs-1 col-md-3"></div>
+            <div class="col-xs-10 col-md-6 restaurant-search">
+                <div class="row" style="min-height: 540px !important;">
+                    <div class="col-md-12">
+                        <form name="searchForm" class="form-inline-rem" ng-submit="vm.search(searchForm.$valid && vm.searchParams.currentPosition)" novalidate>
+                            <div class="row hidden-xs">
+                                <div class="col-sm-12 form-group"
+                                     ng-class="{ 'has-error': (searchForm.searchKeyword.$touched || searchForm.$submitted) && searchForm.searchKeyword.$invalid }">
+                                    <input type="text" name="searchKeyword" class="form-control input-lg no_border_radius"
+                                           placeholder="{{ 'SEARCH.ENTER SEARCH STRING' | translate}}"
+                                           ng-model="vm.searchParams.keyword">
+                                    <div class="form_error" ng-messages="searchForm.searchKeyword.$error"
+                                         ng-if="searchForm.searchKeyword.$touched || searchForm.$submitted"
+                                         role="alert"> <p ng-message="required" translate="HOME.SEARCH KEY EMPTY"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row visible-xs">
+                                <div class="col-xs-12 form-group"
+                                     ng-class="{ 'has-error': (searchForm.searchKeyword.$touched || searchForm.$submitted) && searchForm.searchKeyword.$invalid }">
+                                    <input type="text" name="searchKeyword" class="form-control no_border_radius"
+                                           placeholder="{{ 'SEARCH.ENTER SEARCH STRING' | translate}}"
+                                           ng-model="vm.searchParams.keyword">
+                                    <div class="form_error" ng-messages="searchForm.searchKeyword.$error"
+                                         ng-if="searchForm.searchKeyword.$touched || searchForm.$submitted"
+                                         role="alert"> <p ng-message="required" translate="HOME.SEARCH KEY EMPTY"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row hidden-xs">
+                                <div class="col-sm-12 form-group">
+                                    <button type="submit" class="btn btn-lg btn-primary pull-right no_border_radius" translate="HOME.SEARCH"> <span class="glyphicon glyphicon-search"></span></button>
+                                    <div class="input-group input-group-lg" style="margin-right: 100px;"
+                                         ng-class="{ 'has-error': (searchForm.currentPosition.$touched || searchForm.$submitted) && searchForm.currentPosition.$invalid || vm.location_not_choosen}">
+                                        <span ng-click="vm.locate()" class="input-group-addon location-marker"><span class="glyphicon glyphicon-map-marker"></span> <span translate="CLIENT.MY LOCATION"></span></span>
+                                        <input type="text" name="currentPosition" autocomplete="off" id="searchLocationInput" class="form-control input-lg no_border_radius"
+                                               placeholder="{{ 'SEARCH.CURRENT POSITION' | translate }}"
+                                               ng-model="vm.searchParams.currentPosition" required>
+                                    </div>
+                                    <div class="form_error" ng-messages="searchForm.currentPosition.$error"
+                                         ng-if="searchForm.currentPosition.$touched || searchForm.$submitted"
+                                         role="alert"> <p ng-message="required" translate="HOME.POSITION EMPTY"></p>
+                                    </div>
+                                    <p ng-if="vm.location_not_choosen" class="cl-brown">{{ vm.location_not_choosen | translate}}</p>
+                                </div>
+                            </div>
+                            <div class="row visible-xs">
+                                <div class="col-xs-12 form-group">
+                                    <button type="submit" class="btn btn-primary pull-right no_border_radius"> <span class="glyphicon glyphicon-search"></span></button>
+                                    <div class="input-group" style="margin-right: 50px;"
+                                         ng-class="{ 'has-error': (searchForm.currentPosition.$touched || searchForm.$submitted) && searchForm.currentPosition.$invalid || vm.location_not_choosen}">
+                                        <span ng-click="vm.locate()" class="input-group-addon location-marker"><span class="glyphicon glyphicon-map-marker"></span></span>
+                                        <input type="text" name="currentPosition" id="searchLocationInput" class="form-control no_border_radius"
+                                               placeholder="{{ 'SEARCH.CURRENT POSITION' | translate }}"
+                                               ng-model="vm.searchParams.currentPosition" required>
+                                    </div>
+                                    <div class="form_error" ng-messages="searchForm.currentPosition.$error"
+                                         ng-if="searchForm.currentPosition.$touched || searchForm.$submitted"
+                                         role="alert"> <p ng-message="required" translate="HOME.POSITION EMPTY"></p>
+                                    </div>
+                                    <p ng-if="vm.location_not_choosen" class="cl-brown">{{ vm.location_not_choosen | translate}}</p>
+                                </div>
+                            </div>
+                            <input ng-hide="true" name="latitude" id="latitude" type="text" class="form-control" ng-model="vm.latitude">
+                            <input ng-hide="true" name="longitude" id="longitude" type="text" class="form-control" ng-model="vm.longitude">
+                        </form>
+                        
+                    </div>
+                    <div class="col-md-12">
+                        <div class="text-center v-center-lg" ng-if="vm.mapLoading">
+                            <img src="assets/images/loading.gif" alt="loading">
+                        </div>
+                        <div ng-hide="vm.hidemap" id="home_map_holder" style="height: 400px !important; width: 100%"></div>
+                        <div ng-show="vm.hidemap" id="home_map_holder2" style="height: 400px !important; width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-1 col-md-3"></div>
+        </div>
+    </div>
+</div>
